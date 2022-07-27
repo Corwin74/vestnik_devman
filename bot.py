@@ -32,8 +32,8 @@ def check_devman_status(context: CallbackContext):
                     status = 'Преподавателю все понравилось. Можно приступать к следующему уроку!'
                 lesson_title = attempt['lesson_title']
                 lesson_url = attempt['lesson_url']
-                context.bot.send_message(chat_id=chat_id, text=f'У вас проверили работу \
-                                         "{lesson_title}"\n\n{status}\n{lesson_url}')
+                context.bot.send_message(chat_id=chat_id,
+                    text=f'У вас проверили работу "{lesson_title}"\n\n{status}\n{lesson_url}')
         last_time = review.get('timestamp_to_request', last_time)
         last_time = review.get('last_attempt_timestamp', last_time)
         context.bot_data['last_time'] = last_time
@@ -61,10 +61,13 @@ def main():
     j = updater.job_queue
     j.run_repeating(check_devman_status, 300, 10, context=(dvmn_token, tlgm_chat_id))
 
-    updater.start_webhook(listen="0.0.0.0",
+
+    updater.start_webhook(listen="127.0.0.1",
                           port=tlgm_webhook_port,
+                          url_path='vestnik',
                           webhook_url=tlgm_webhook_url)
-                    
+    
+    updater.bot.setWebhook(tlgm_webhook_url)
     updater.idle()
 
 
