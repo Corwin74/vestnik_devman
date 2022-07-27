@@ -18,10 +18,14 @@ git clone git@github.com:Corwin74/vestnik_devman.git
 Далее, в корневой папке проекта необходимо создать файл `.env` и записать в него настройки в виде:
 
 ```
-TLGM_BOT_TOKEN=токен Вашего бота в телеграм
-DVMN_API_TOKEN=Ваш токен dvmn
-TLGM_CHAT_ID=Ваш id телеграмм
+TLGM_BOT_TOKEN= токен Вашего бота в телеграм
+DVMN_API_TOKEN= Ваш токен dvmn
+TLGM_CHAT_ID= Ваш id телеграмм
+TLGM_WEBHOOK_URL= URL для регистрации webhook 
+TLGM_WEBHOOK_PORT= Port для регистрации webhook
 ```
+Текущая версия телеграм-бота требует внешнего nginx сервера, слушающего адрес TLGM_WEBHOOK_URL:TLGM_WEBHOOK_PORT
+по протоколу SSL и перенаправляющего запросы по этому адресу на 127.0.0.1:8008
 
 Затем используйте `pip` для установки зависимостей. Рекомендуется использовать отдельное виртуальное окружение.
 [Инструкция](https://dvmn.org/encyclopedia/pip/pip_virtualenv/)

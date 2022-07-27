@@ -1,5 +1,6 @@
 import logging
 import requests
+import time
 from environs import Env
 from telegram import Update
 from telegram.ext import CommandHandler, Updater, CallbackContext
@@ -7,6 +8,7 @@ from telegram.ext import CommandHandler, Updater, CallbackContext
 logger = logging.getLogger(__file__)
 
 DVMN_URL = 'https://dvmn.org/api/long_polling/'
+SLEEP_TIME = 600
 
 
 def start(update: Update, context: CallbackContext):
@@ -38,7 +40,7 @@ def check_devman_status(context: CallbackContext):
     except requests.exceptions.ReadTimeout:
         pass
     except requests.exceptions.ConnectionError:
-        print('Connection Error!')
+        time.sleep(SLEEP_TIME)
 
 
 def main():
@@ -47,8 +49,10 @@ def main():
     env = Env()
     env.read_env()
     dvmn_token = env('DVMN_API_TOKEN')
-    tlgm_bot_token =  env('TLGM_BOT_TOKEN')
-    tlgm_chat_id =  env('TLGM_CHAT_ID')
+    tlgm_bot_token = env('TLGM_BOT_TOKEN')
+    tlgm_chat_id = env('TLGM_CHAT_ID')
+    tlgm_webhook_url = env('TLGM_WEBHOOK_URL')
+    tlgm_webhook_port = env('TLGM_WEBHOOK_PORT')
     updater = Updater(token=tlgm_bot_token, use_context=True)
     dispatcher = updater.dispatcher
     start_handler = CommandHandler('start', start)
@@ -57,7 +61,11 @@ def main():
     j = updater.job_queue
     j.run_repeating(check_devman_status, 300, 10, context=(dvmn_token, tlgm_chat_id))
 
-    #updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=tlgm_webhook_port,
+                          webhook_url=tlgm_webhook_url)
+                    
+    updater.idle()
 
 
 if __name__ == '__main__':
