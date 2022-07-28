@@ -21,6 +21,7 @@ git clone git@github.com:Corwin74/vestnik_devman.git
 TLGM_BOT_TOKEN= токен Вашего бота в телеграм
 DVMN_API_TOKEN= Ваш токен dvmn
 TLGM_CHAT_ID= Ваш id телеграмм
+```
 
 Затем используйте `pip` для установки зависимостей. Рекомендуется использовать отдельное виртуальное окружение.
 [Инструкция](https://dvmn.org/encyclopedia/pip/pip_virtualenv/)
