@@ -31,7 +31,7 @@ python bot.py
 ## Deploy на VPS под Linux
 Необходимо на VPS выполнить все шаги описанные выше.  
 Для того, чтобы запускать нашего бота при старте системы автоматически, воспользуемся системным менеджером `systemd`.  
-Создадим файл `bot.service` в директории `/etc/systemd/system` с таким содержанием:
+Создадим файл `bot.service` в директории `/etc/systemd/system` :
 ```
 $ sudo touch /etc/systemd/system/bot.service
 ```
@@ -50,7 +50,7 @@ After=network.target
 Type=simple
 User=root
 # замените на свой путь к каталогу, где находится `bot.py`
-WorkingDirectory=/home/user/vestnik_devman/bot.py
+WorkingDirectory=/home/user/vestnik_devman/
 # замените на свои пути к виртуальному окружению и папке с ботом
 ExecStart=/home/envs/tlgm_env/bin/python3 /home/user/vestnik_devman/bot.py
 RestartSec=10
@@ -64,10 +64,13 @@ WantedBy=multi-user.target
 # перечитываем конфигурацию 
 # (обнаружит файл `bot.service`)
 $ sudo systemctl daemon-reload
+
 # подключаем демон `bot.service`
 $ sudo systemctl enable bot
+
 # запускаем демон `bot.service`
 $ sudo systemctl start bot
+
 # смотрим статус демона `bot.service`
 $ sudo systemctl status bot
 ```
@@ -75,8 +78,10 @@ $ sudo systemctl status bot
 ```
 # перезапуск
 $ sudo systemctl restart bot
+
 # остановка
 $ sudo systemctl stop bot
+
 # запуск после остановки
 $ sudo systemctl start bot
 ```
