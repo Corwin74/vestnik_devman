@@ -12,6 +12,7 @@ SLEEP_TIME = 600
 
 
 class TlgmLogsHandler(logging.Handler):
+
     def __init__(self, token, chat_id):
         super().__init__()
         self.bot = telegram.Bot(token=token)
@@ -25,6 +26,7 @@ class TlgmLogsHandler(logging.Handler):
 
 
 def main():
+
     env = Env()
     env.read_env()
     dvmn_token = env('DVMN_API_TOKEN')
@@ -39,16 +41,12 @@ def main():
     logger.addHandler(tlgm_handler)
     logger.info('Started A Bot "Vestnik Devman".')
 
-    try:
-        0/0
-    except Exception:
-        logging.exception()
+    last_time = ''
+    headers = {'Authorization': dvmn_token}
 
     while True:
-        last_time = ''
-        headers = {'Authorization': dvmn_token}
-        params = {'timestamp': last_time}
         try:
+            params = {'timestamp': last_time}
             response = requests.get(DVMN_URL, headers=headers, params=params)
             response.raise_for_status()
             review = response.json()
@@ -75,8 +73,12 @@ def main():
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
+            logger.error('Connection Error!')
             time.sleep(SLEEP_TIME)
-        pass
+            logger.info('Trying to reconnect...')
+        except Exception:
+            logger.exception("O-o-o-p-s!")
+            time.sleep(SLEEP_TIME)
 
 
 if __name__ == '__main__':
