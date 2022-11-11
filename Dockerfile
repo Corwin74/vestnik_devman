@@ -1,11 +1,17 @@
 FROM python:3.9-slim
 
-WORKDIR /app
+RUN useradd -ms /bin/bash bot_user
 
-COPY requirements.txt .
+USER bot_user
 
-RUN pip install -r requirements.txt
+WORKDIR /home/bot_user
 
-COPY . .
+ENV PATH="/home/bot_user/.local/bin:${PATH}"
+
+COPY --chown=bot_user:bot_user requirements.txt requirements.txt
+
+RUN pip install --disable-pip-version-check --user -r requirements.txt
+
+COPY --chown=bot_user:bot_user . .
 
 CMD ["python", "bot.py"]
