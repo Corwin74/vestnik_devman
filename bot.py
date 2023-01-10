@@ -79,6 +79,7 @@ def main():
         except Exception:
             logger.exception("O-o-o-p-s!")
             time.sleep(SLEEP_TIME)
+            last_time = ''
 
 
 if __name__ == '__main__':
