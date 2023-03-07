@@ -76,6 +76,10 @@ def main():
             logger.error('Connection Error!')
             time.sleep(SLEEP_TIME)
             logger.info('Trying to reconnect...')
+        except requests.exceptions.HTTPError:
+            logger.error('HTTPError!')
+            time.sleep(SLEEP_TIME)
+            logger.info('Trying to reconnect...')
         except Exception:
             logger.exception("O-o-o-p-s!")
             time.sleep(SLEEP_TIME)
